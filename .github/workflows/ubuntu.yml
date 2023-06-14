@@ -1,0 +1,26 @@
+name: "Ubuntu Docker Build"
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 6'
+jobs:
+  kernel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build kernel packages
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        dockerfile: ubuntu/kernel
+        repository: c3eru/kernul
+        tags: k-ubuntu
+
+    - uses: yanzay/notify-telegram@v0.1.0
+      if: always()
+      with:
+        chat: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        status: ${{ job.status }}
