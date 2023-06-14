@@ -33,7 +33,7 @@ RUN apt-get update -qqy && \
         tzdata \
         wget \
         xxd \
-        gpio \
+        cpio \
         zip && \
     apt-get autoremove -qqy && \
     apt-get autoclean -qqy
